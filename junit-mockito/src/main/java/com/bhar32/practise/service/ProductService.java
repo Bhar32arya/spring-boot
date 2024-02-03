@@ -15,11 +15,12 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-    public void addProduct(Product product) {
+    public ResponseEntity<Product> addProduct(Product product) {
         productRepository.save(product);
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<List<Product>> getAllProdcts() {
+    public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> productList = new ArrayList<>();
         productRepository.findAll().forEach(productList::add);
         if(productList.isEmpty()) {

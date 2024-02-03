@@ -1,10 +1,8 @@
 package com.bhar32.practise.controller;
 
-import com.bhar32.practise.model.ApiResponse;
 import com.bhar32.practise.model.Product;
 import com.bhar32.practise.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,13 +15,13 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/addProduct")
-    public ResponseEntity<ApiResponse> addProduct(@RequestBody Product product) {
-        productService.addProduct(product);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product _product  = new Product(product.getId(), product.getName(), product.getPrice());
+        return productService.addProduct(_product);
     }
 
     @GetMapping("/getAllProducts")
     public ResponseEntity<List<Product>> getProducts() {
-        return productService.getAllProdcts();
+        return productService.getAllProducts();
     }
 }
