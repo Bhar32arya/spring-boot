@@ -1,10 +1,19 @@
 package com.bhar32.practise.model;
 
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 
-@Data
+@Setter
+@Getter
+@Entity
 public class Product implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private double price;
