@@ -13,15 +13,12 @@ public class TutorialService {
     @Autowired
     private TutorialRepository tutorialRepository;
 
-    public String buildId(long id, String title) {
-        if(title.startsWith("J")) {
-            return "Java" + id + title;
-        }
-        return id + title;
+    public long buildId(long id) {
+        return id + 5;
     }
 
-    public boolean checkTutorialAlreadyExist(Long id) {
-        Optional<Tutorial> optionalTutorial = tutorialRepository.findById(id.longValue());
+    public boolean checkTutorialAlreadyExist(long id) {
+        Optional<Tutorial> optionalTutorial = tutorialRepository.findById(id);
         if(optionalTutorial.isPresent()) {
             return true;
         }

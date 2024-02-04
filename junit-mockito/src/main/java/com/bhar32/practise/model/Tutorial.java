@@ -29,6 +29,9 @@ public class Tutorial {
         this.published = published;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
     public long getId() {
         return id;
     }

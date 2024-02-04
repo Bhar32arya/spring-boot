@@ -3,9 +3,13 @@ package com.bhar32.practise.controller;
 import java.util.ArrayList;
 import java.util.List;
 import com.bhar32.practise.exception.ResourceNotFoundException;
+import com.bhar32.practise.model.ApiResponse;
 import com.bhar32.practise.model.Tutorial;
 import com.bhar32.practise.repository.TutorialRepository;
+import com.bhar32.practise.service.TutorialService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
+
+    @Autowired
+    TutorialService tutorialService;
 
     @Autowired
     TutorialRepository tutorialRepository;
@@ -50,9 +58,24 @@ public class TutorialController {
     }
 
     @PostMapping("/tutorials")
-    public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
-        Tutorial _tutorial = tutorialRepository.save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false));
-        return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
+    public ResponseEntity createTutorial(@RequestBody Tutorial tutorial) {
+        long builtId = tutorialService.buildId(tutorial.getId());
+        ApiResponse apiResponse = new ApiResponse();
+        if(!tutorialService.checkTutorialAlreadyExist(builtId)) {
+            log.info("Tutorial does not exist so creating one");
+            tutorial.setId(builtId);
+            tutorialRepository.save(tutorial);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("unique", String.valueOf(builtId));
+            apiResponse.setMessage("Successfully tutorial added");
+            apiResponse.setId(builtId);
+            return new ResponseEntity<ApiResponse>(apiResponse, headers, HttpStatus.CREATED);
+        } else {
+            log.info("Tutorial already exist so skipping the creation");
+            apiResponse.setId(builtId);
+            apiResponse.setMessage("Tutorial already exist");
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.ACCEPTED);
+        }
     }
 
     @PutMapping("/tutorials/{id}")

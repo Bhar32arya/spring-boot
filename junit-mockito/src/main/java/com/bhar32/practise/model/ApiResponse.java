@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ApiResponse {
-    private int id;
+    private long id;
     private String message;
 }
