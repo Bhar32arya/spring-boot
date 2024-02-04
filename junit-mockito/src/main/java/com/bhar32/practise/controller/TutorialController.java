@@ -2,7 +2,6 @@ package com.bhar32.practise.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.bhar32.practise.exception.ResourceNotFoundException;
 import com.bhar32.practise.model.Tutorial;
 import com.bhar32.practise.repository.TutorialRepository;
@@ -71,14 +70,12 @@ public class TutorialController {
     @DeleteMapping("/tutorials/{id}")
     public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
         tutorialRepository.deleteById(id);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/tutorials")
     public ResponseEntity<HttpStatus> deleteAllTutorials() {
         tutorialRepository.deleteAll();
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -89,8 +86,6 @@ public class TutorialController {
         if (tutorials.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         return new ResponseEntity<>(tutorials, HttpStatus.OK);
     }
-
 }
