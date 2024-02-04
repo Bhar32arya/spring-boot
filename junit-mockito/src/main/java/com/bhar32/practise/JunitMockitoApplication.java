@@ -9,5 +9,4 @@ public class JunitMockitoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JunitMockitoApplication.class, args);
 	}
-
 }

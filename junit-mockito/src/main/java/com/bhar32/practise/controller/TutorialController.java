@@ -50,7 +50,7 @@ public class TutorialController {
     }
 
     @GetMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
+    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") String id) {
         Tutorial tutorial = tutorialRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
 
@@ -59,39 +59,42 @@ public class TutorialController {
 
     @PostMapping("/tutorials")
     public ResponseEntity createTutorial(@RequestBody Tutorial tutorial) {
-        long builtId = tutorialService.buildId(tutorial.getId());
+        String id = tutorialService.buildId(tutorial.getIsbn(), tutorial.getAisle());//dependenyMock
         ApiResponse apiResponse = new ApiResponse();
-        if(!tutorialService.checkTutorialAlreadyExist(builtId)) {
-            log.info("Tutorial does not exist so creating one");
-            tutorial.setId(builtId);
-            tutorialRepository.save(tutorial);
+
+        if (!tutorialService.checkTutorialAlreadyExist(id))//mock
+        {
+            log.info("Tutorial do not exist so creating one");
+            tutorial.setId(id);
+            tutorialRepository.save(tutorial);//mock
             HttpHeaders headers = new HttpHeaders();
-            headers.add("unique", String.valueOf(builtId));
-            apiResponse.setMessage("Successfully tutorial added");
-            apiResponse.setId(builtId);
+            headers.add("unique", id);
+
+            apiResponse.setMessage("Successfully Added");
+            apiResponse.setId(id);
             return new ResponseEntity<ApiResponse>(apiResponse, headers, HttpStatus.CREATED);
         } else {
-            log.info("Tutorial already exist so skipping the creation");
-            apiResponse.setId(builtId);
+            log.info("Tutorial exist so skipping creation");
             apiResponse.setMessage("Tutorial already exist");
+            apiResponse.setId(id);
             return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.ACCEPTED);
         }
     }
 
     @PutMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
+    public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") String id, @RequestBody Tutorial tutorial) {
         Tutorial _tutorial = tutorialRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + id));
 
-        _tutorial.setTitle(tutorial.getTitle());
+       /* _tutorial.setTitle(tutorial.getTitle());
         _tutorial.setDescription(tutorial.getDescription());
-        _tutorial.setPublished(tutorial.isPublished());
+        _tutorial.setPublished(tutorial.isPublished());*/
 
         return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
     }
 
     @DeleteMapping("/tutorials/{id}")
-    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") String id) {
         tutorialRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

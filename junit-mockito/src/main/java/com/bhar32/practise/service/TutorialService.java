@@ -4,7 +4,6 @@ import com.bhar32.practise.model.Tutorial;
 import com.bhar32.practise.repository.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -13,15 +12,21 @@ public class TutorialService {
     @Autowired
     private TutorialRepository tutorialRepository;
 
-    public long buildId(long id) {
-        return id + 5;
+    public String buildId(String isbn, int aisle) {
+        if (isbn.startsWith("Z")) {
+            return "OLD" + isbn + aisle;
+        }
+        return isbn + aisle;
     }
 
-    public boolean checkTutorialAlreadyExist(long id) {
-        Optional<Tutorial> optionalTutorial = tutorialRepository.findById(id);
-        if(optionalTutorial.isPresent()) {
+    public boolean checkTutorialAlreadyExist(String id) {
+        Optional<Tutorial> tutorial = tutorialRepository.findById(id);
+        if (tutorial.isPresent())
             return true;
-        }
-        return false;
+        else
+            return false;
+    }
+    public Tutorial getBookById(String id) {
+        return tutorialRepository.findById(id).get();
     }
 }

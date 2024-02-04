@@ -6,62 +6,55 @@ import jakarta.persistence.*;
 @Table(name = "tutorials")
 public class Tutorial {
 
+    @Column(name = "book_name")
+    private String book_name;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "id")
+    private String id;
+    @Column(name = "isbn")
+    private String isbn;
+    @Column(name = "aisle")
+    private int aisle;
+    @Column(name = "author")
+    private String author;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "published")
-    private boolean published;
-
-    public Tutorial() {
-
+    public String getBook_name() {
+        return book_name;
     }
 
-    public Tutorial(String title, String description, boolean published) {
-        this.title = title;
-        this.description = description;
-        this.published = published;
+    public void setBook_name(String book_name) {
+        this.book_name = book_name;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public String getDescription() {
-        return description;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public int getAisle() {
+        return aisle;
     }
 
-    public boolean isPublished() {
-        return published;
+    public void setAisle(int aisle) {
+        this.aisle = aisle;
     }
 
-    public void setPublished(boolean isPublished) {
-        this.published = isPublished;
+    public String getAuthor() {
+        return author;
     }
 
-    @Override
-    public String toString() {
-        return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }
